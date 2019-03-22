@@ -54,33 +54,21 @@ func main() {
 	hasDiskWrite := false
 	hasMem := false
 	hasNet := false
-	// iz := 1
-	// ic := 1
-	// id := 1
-	// iw := 1
-	// im := 1
-	// in := 1
 	indexNetRead := make([]int, 0)
 	indexNetWrite := make([]int, 0)
-	// listZ := make([]lazynmon.ZZZZ, 0, 1024)
 	sliceZZZZTime := make([]string, 0, 1024)
-	// listCPUAll := make([]lazynmon.CPUAll, 0, 1024)
 	maxCPUUsage, averageCPUUsage, minCPUUsage := 0.0, 0.0, 100.0
 	sliceCPUUser := make([]float64, 0, 1024)
 	sliceCPUSys := make([]float64, 0, 1024)
 	sliceCPUWait := make([]float64, 0, 1024)
 	sliceCPUUsage := make([]float64, 0, 1024)
-	// listDiskRead := make([]lazynmon.DiskRead, 0, 1024)
 	sliceDiskRead := make([]float64, 0, 1024)
-	// listDiskWrite := make([]lazynmon.DiskWrite, 0, 1024)
 	sliceDiskWrite := make([]float64, 0, 1024)
-	// listMem := make([]lazynmon.Memory, 0, 1024)
 	maxMemUsage, averageMemUsage, minMemUsage, memoryTotal := 0.0, 0.0, 100.0, 0.0
 	sliceMemFree := make([]float64, 0, 1024)
 	sliceMemCached := make([]float64, 0, 1024)
 	sliceMemBuffers := make([]float64, 0, 1024)
 	sliceMemUsage := make([]float64, 0, 1024)
-	// listNet := make([]lazynmon.Net, 0, 1024)
 	sliceNetReadTotal := make([]float64, 0, 1024)
 	sliceNetWriteTotal := make([]float64, 0, 1024)
 	for {
@@ -133,11 +121,6 @@ func main() {
 			continue
 		}
 		if hasZZZZ && strings.HasPrefix(strLine, "ZZZZ,") { //&& iz <= 5 {
-			// listZ = append(listZ, lazynmon.ZZZZ{
-			// 	TName: arr[1],
-			// 	Time:  arr[2],
-			// 	Date:  arr[3],
-			// })
 			sliceZZZZTime = append(sliceZZZZTime, arr[2])
 			// fmt.Println(strLine, tool.ParseDate(arr[3]+" "+arr[2]))
 			// iz++
@@ -148,13 +131,6 @@ func main() {
 			su := tool.GetFloatFromString(arr[3])
 			wu := tool.GetFloatFromString(arr[4])
 			use := tool.SumOfFloat(uu, su)
-			// listCPUAll = append(listCPUAll, lazynmon.CPUAll{
-			// 	TName:     arr[1],
-			// 	UserUsage: uu,
-			// 	SysUsage:  su,
-			// 	WaitUsage: wu,
-			// 	Usage:     use,
-			// })
 			sliceCPUUser = append(sliceCPUUser, uu)
 			sliceCPUSys = append(sliceCPUSys, su)
 			sliceCPUWait = append(sliceCPUWait, wu)
@@ -171,20 +147,12 @@ func main() {
 			continue
 		}
 		if hasDiskRead && strings.HasPrefix(strLine, "DISKREAD,") { //&& id <= 20 {
-			// listDiskRead = append(listDiskRead, lazynmon.DiskRead{
-			// 	TName:     arr[1],
-			// 	ReadRatio: tool.SumOfEachColumns(strLine),
-			// })
 			sliceDiskRead = append(sliceDiskRead, tool.SumOfEachColumns(strLine))
 			// fmt.Println(strLine, "\tDisk Read KB/s", tool.SumOfEachColumns(strLine))
 			// id++
 			continue
 		}
 		if hasDiskWrite && strings.HasPrefix(strLine, "DISKWRITE,") { //&& iw <= 5 {
-			// listDiskWrite = append(listDiskWrite, lazynmon.DiskWrite{
-			// 	TName:      arr[1],
-			// 	WriteRatio: tool.SumOfEachColumns(strLine),
-			// })
 			sliceDiskWrite = append(sliceDiskWrite, tool.SumOfEachColumns(strLine))
 			// fmt.Println(strLine, "\tDisk Write KB/s", tool.SumOfEachColumns(strLine))
 			// iw++
@@ -197,14 +165,6 @@ func main() {
 			mBuffers, _ := decimal.NewFromString(arr[14])
 			mUsage := mTotal.Sub(mFree).Sub(mCached).Sub(mBuffers).DivRound(mTotal, 4).Mul(decimal.NewFromFloat32(100))
 			nu, _ := mUsage.Float64()
-			// listMem = append(listMem, lazynmon.Memory{
-			// 	TName:   arr[1],
-			// 	Total:   tool.GetFloatFromDecimal(mTotal),
-			// 	Free:    tool.GetFloatFromDecimal(mFree),
-			// 	Cached:  tool.GetFloatFromDecimal(mCached),
-			// 	Buffers: tool.GetFloatFromDecimal(mBuffers),
-			// 	Usage:   nu,
-			// })
 			if memoryTotal == 0.0 {
 				memoryTotal = tool.GetFloatFromDecimal(mTotal)
 			}
@@ -225,11 +185,6 @@ func main() {
 			continue
 		}
 		if hasNet && strings.HasPrefix(strLine, "NET,") { //&& in <= 20 {
-			// listNet = append(listNet, lazynmon.Net{
-			// 	TName:      arr[1],
-			// 	ReadTotal:  tool.SumOfSpecifiedColumns(strLine, indexNetRead),
-			// 	WriteTotal: tool.SumOfSpecifiedColumns(strLine, indexNetWrite) * -1,
-			// })
 			sliceNetReadTotal = append(sliceNetReadTotal, tool.SumOfSpecifiedColumns(strLine, indexNetRead))
 			sliceNetWriteTotal = append(sliceNetWriteTotal, tool.SumOfSpecifiedColumns(strLine, indexNetWrite)*-1)
 			// fmt.Println(strLine, "\tTotal-Read:", tool.SumOfSpecifiedColumns(strLine, indexNetRead), "\tTotal-Write:", tool.SumOfSpecifiedColumns(strLine, indexNetWrite))
@@ -242,30 +197,6 @@ func main() {
 		log.Println("解析nmon结果文件失败")
 		return
 	}
-	// fmt.Println("⬇️ZZZZ⬇️")
-	// for _, v := range listZ {
-	// 	fmt.Printf("%v\n", v)
-	// }
-	// fmt.Println("\n⬇️CPU_ALL⬇️")
-	// for _, v := range listCPUAll {
-	// 	fmt.Printf("%v\n", v)
-	// }
-	// fmt.Println("\n⬇️DISKREAD⬇️")
-	// for _, v := range listDiskRead {
-	// 	fmt.Printf("%v\n", v)
-	// }
-	// fmt.Println("\n⬇️DISKWRITE⬇️")
-	// for _, v := range listDiskWrite {
-	// 	fmt.Printf("%v\n", v)
-	// }
-	// fmt.Println("\n⬇️MEM⬇️")
-	// for _, v := range listMem {
-	// 	fmt.Printf("%v\n", v)
-	// }
-	// fmt.Println("\n⬇️NET⬇️")
-	// for _, v := range listNet {
-	// 	fmt.Printf("%v\n", v)
-	// }
 
 	fileNameWithoutExt := fileName[:strings.LastIndex(fileName, ".")]
 
