@@ -1,6 +1,6 @@
 # lazy-nmon
 nmon辅助工具，可直接提取nmon的结果文件中的CPU、Memory、Net、Disk生成图表展示。  
-**仅为试验性尝试，不打算再调整。**
+**仅为试验性尝试，不打算再调整。**  
 **相关代码已PR至[eazyNmon](https://github.com/mzky/easyNmon)**
 
 ## 代码运行须知
