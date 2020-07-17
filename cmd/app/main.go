@@ -22,9 +22,10 @@ const (
 
 func main() {
 	// 默认工作路径为lazy_nmon的路径
-	tool.WorkPath = flag.String("wp", tool.GetCurrentPath(), "指定当前工作路径")
+	tool.WorkPath = flag.String("wp", tool.GetCurrentPath(), "")
+	//tool.WorkPath = flag.String("wp", tool.GetCurrentPath(), "指定当前工作路径")
 	// 默认命名格式为 ${name}_${users}u_${duration}m_${now}
-	tool.NmonNameFormat = flag.String("fmt", "${name}_${users}u_${duration}m_${now}", "指定nmon结果文件命名格式")
+	tool.NmonNameFormat = flag.String("fmt", "${name}_${users}u_${duration}m_${now}", "/home/ec2-user/test/goproj/nmon_files/ip-172-31-10-38_200717_0733.nmon")
 	flag.Parse()
 
 	// fmt.Printf("nmon结果文件命名格式: %s\n", *tool.NmonNameFormat)
